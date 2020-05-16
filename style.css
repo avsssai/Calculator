@@ -1,0 +1,128 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
+}
+#window {
+    position: relative;
+}
+
+#header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    height: 5vh;
+    width: 100%;
+    background-color:hsl(7, 56%, 59%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #343c44;
+}
+
+#header > #logo img{
+    height: 20px;
+    width: 20px;
+    margin: 10px;
+}
+
+#title {
+    margin: 0;
+}
+
+#app {
+    height: 100vh;
+    width: 100vw;
+    background-color: #4E5C67;
+}
+
+/* #pedestal {
+    position: relative;
+    height: 600px;
+    width: 600px;
+    background-color: #343c44;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    border-radius: 10px;
+    top:10vh ;
+    margin: 0 auto;
+}    */
+
+/*
+orange - #e35848
+black - #343c44
+*/
+#calculator {
+    position: relative;
+    height: 530px;
+    width: 400px;
+    background-color:hsl(7, 56%, 59%);
+    top: 20vh;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    /* z-index: 200; */
+}
+
+#screen {
+    position: relative;
+    height: 100px;
+    width: 350px;
+    background: #343c44;
+    margin: 0 auto;
+    top: 20px;
+    border-radius: 10px;
+
+}
+
+#keypad {
+    position: relative;
+    background:hsl(205, 13%, 24%);
+    margin: 0 auto;
+    height: 360px;
+    width: 350px;
+    top: 40px;
+    border-radius: 10px;
+    padding-top: 15px;
+    box-sizing: border-box;
+}
+.buttons {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-evenly;
+}
+button {
+    border: 0;
+    height: 60px;
+    width: 60px;
+    margin: 3px 5px ;
+    
+    border-radius: 50px;
+    font-size: 100%;
+    font-family: inherit;
+
+    background-color:#4E5C67;
+    color: white;
+}
+button:focus {
+    outline: none;
+}
+
+button.zero {
+    width: 140px;
+}
+
+#present {
+    position: relative;
+    color: white;
+    top: 50px;
+    text-align: right;
+    font-size: 40px;
+    /* padding: 5px; */
+    padding-right: 10px;
+    overflow-x: scroll;
+    height: 70px;
+    box-sizing: border-box;
+}
