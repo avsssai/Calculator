@@ -29,56 +29,56 @@
         <div id="app">
                 <div id="calculator">
                     <div id="screen">
-                        <div id="past"></div>
-                        <div id="present">
+                        <div id="past" data-previous-operand></div>
+                        <div id="present" data-present-operand>
                             
                         </div>
                     </div>
                     <div id="keypad">
                         <div class="row">
                             <div class="buttons">
-                                <button value="" id='acbutton' onclick="clear()">AC</button>
-                                <button>+/-</button>
-                                <button>%</button>
-                                <button>/</button>
+                                <button value="" id='acbutton' onclick="clear()" data-all-clear>AC</button>
+                                <button name="sign" data-sign-change>+/-</button>
+                                <button data-delete>DEL</button>
+                                <button data-operation>/</button>
     
                             </div>
 
                         </div>
                         <div class="row">
                             <div class="buttons">
-                                <button value="7">7</button>
-                                <button value="8">8</button>
-                                <button value="9">9</button>
-                                <button>X</button>
+                                <button value="7" data-number>7</button>
+                                <button value="8" data-number>8</button>
+                                <button value="9" data-number>9</button>
+                                <button data-operation>X</button>
     
                             </div>
                         </div>
                         <div class="row">
                             <div class="buttons">
-                                <button value="4">4</button>
-                                <button value="5">5</button>
-                                <button value="6">6</button>
-                                <button>-</button>
+                                <button value="4" data-number>4</button>
+                                <button value="5" data-number>5</button>
+                                <button value="6" data-number>6</button>
+                                <button data-operation>-</button>
     
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="buttons">
-                                <button value="1">1</button>
-                                <button value="2">2</button>
-                                <button value="3">3</button>
-                                <button>+</button>
+                                <button value="1" data-number>1</button>
+                                <button value="2" data-number>2</button>
+                                <button value="3"data-number>3</button>
+                                <button name="add" data-operation>+</button>
     
                             </div>
 
                         </div>
                         <div class="row">
                             <div class="buttons">
-                                <button class="zero" value="0">0</button>
-                                <button value=".">.</button>
-                                <button>=</button>
+                                <button class="zero" value="0" data-number>0</button>
+                                <button value="." data-decimal>.</button>
+                                <button data-equals>=</button>
     
                             </div>
 
