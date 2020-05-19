@@ -1,62 +1,10 @@
-// let keypad = document.getElementById('keypad');
-// let initialNumber = '0';
-// let keypadScreenNumber = "0";
-
-
-// let number1 = '0';
-// let number2 = '0';
-// let operator = null;
-
-// // keypad.textContent = keypadNumber;
-// let presentKeypadScreen  = document.getElementById('present');
-
-// presentKeypadScreen.textContent = keypadScreenNumber;
-
-// let ac = document.getElementById('acbutton');
-
-// // ac button functionality
-// ac.addEventListener('click',clear);
-
-// function clear(e) {
-//     keypadScreenNumber = initialNumber;
-//     presentKeypadScreen.textContent = initialNumber;
-//     console.log(initialNumber);
-
-// }
-
-// // keypad button clicks displaying number
-
-// keypad.addEventListener('click',(e) => {
-    
-//     if(e.target.type === 'submit' && e.target.value !== ''){
-//         keypadScreenNumber += e.target.value;
-//         let zeroRemoved = keypadScreenNumber.slice(1);
-//         presentKeypadScreen.textContent = zeroRemoved;
-//     }
-// })
-
-// function add(num1,num2) {
-//     return num1 + num2;
-// };
-
-// keypad.addEventListener('mousedown',(e)=>{
-//     if(e.target.type === 'submit' && e.target.name === 'add'){
-//         console.log('addition');
-//         number1 = keypadScreenNumber;
-//         operator = e.type.name;
-
-//         // keypadScreenNumber = number2;
-//     }
-    
-// })
- 
-
 //CALCULATOR LOGIC
 
 class Calculator {
-    constructor(previousOperandTextElement,presentOperandTextElement){
+    constructor(previousOperandTextElement,presentOperandTextElement,readyToReset){
         this.presentOperandTextElement = presentOperandTextElement;
         this.previousOperandTextElement = previousOperandTextElement;
+        this.readyToReset = false;
         this.allClear();
     }
     allClear() {
@@ -71,21 +19,80 @@ class Calculator {
     }
     appendDecimalPoint () {
         if(this.presentOperand === '.' || this.presentOperand.includes('.')) return;
-        this.presentOperand += decimalButton.innerText;
+        this.presentOperand = this.presentOperand.toString() + decimalButton.innerText;
     }
     appendNumber(number) {
-        this.presentOperand += number;
+        this.presentOperand = this.presentOperand.toString() +  number.toString();
     }
     chooseOperation(operation) {
+        if(this.presentOperand === '') return;
+        if(this.previousOperand !== ''){
+            // if there is already an operand, and we press an operation button,
+            // we need to compute the value first before entering a new value.
+            this.compute();
+        }
+        this.operation = operation;
+        this.previousOperand = this.presentOperand;
+        this.presentOperand = '';
+        
+    }
+    displayFormat(number) {
+        let stringNumber = number.toString();
+        let integerPart = parseFloat(stringNumber.split('.')[0]);
+        let decimalPart = stringNumber.split('.')[1];
 
+        let integerDisplay;
+        if(isNaN(integerPart)){
+            integerDisplay = '';
+        }else {
+            integerDisplay = integerPart.toLocaleString('en',{maximumFractionDigits:0});
+        }
+
+        if(decimalPart != null){
+            return `${integerDisplay}.${decimalPart}`
+        }else{
+            return `${integerDisplay}`;
+        }
+        
     }
 
     compute() {
+        let computation;
+        let present = parseFloat(this.presentOperand);
+        let past = parseFloat(this.previousOperand);
 
+        if(isNaN(present) || isNaN(past)) return;
+
+        switch(this.operation){
+            case '+':
+                computation = past + present;
+                break;
+            case '-':
+                computation = past - present;
+                break;
+
+            case '*':
+                computation = past * present;
+                break;
+
+            case '/':
+                computation = past / present;
+                computation = computation.toFixed(2);
+                break;
+            default:
+                return;
+            
+        }
+
+        this.presentOperand = computation;
+        this.previousOperand = '';
+        this.operation = undefined;
+        this.readyToReset = true;
     }
 
     updateDisplay() {
-        this.presentOperandTextElement.innerText = this.presentOperand;
+        this.presentOperandTextElement.innerText = this.displayFormat(this.presentOperand);
+        this.previousOperandTextElement.innerText = this.operation ? `${this.displayFormat(this.previousOperand)} ${this.operation}` : '';
     }
 
 
@@ -106,7 +113,19 @@ let calculator = new Calculator(previousOperandTextElement,presentOperandTextEle
 
 numbers.forEach(button => {
     button.addEventListener('click',(e) => {
+        if(calculator.previousOperand === '' && calculator.presentOperand !== '' && calculator.readyToReset){
+            calculator.presentOperand = '';
+            calculator.readyToReset = false;
+        }
         calculator.appendNumber(button.innerText);
+        calculator.updateDisplay();
+
+    })
+})
+
+operationButtons.forEach(button => {
+    button.addEventListener('click',(e)=>{
+        calculator.chooseOperation(button.innerText);
         calculator.updateDisplay();
     })
 })
@@ -124,4 +143,9 @@ allClearButton.addEventListener('click',(e) => {
 deleteButton.addEventListener('click',(e) => {
     calculator.deleteNumber();
     calculator.updateDisplay()
+})
+
+equalsButton.addEventListener('click',(e)=>{
+    calculator.compute();
+    calculator.updateDisplay();
 })

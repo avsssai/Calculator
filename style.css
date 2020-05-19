@@ -117,12 +117,25 @@ button.zero {
 #present {
     position: relative;
     color: white;
-    top: 50px;
+    top: 30px;
     text-align: right;
-    font-size: 40px;
+    font-size: 35px;
     /* padding: 5px; */
     padding-right: 10px;
     overflow-x: scroll;
     height: 70px;
     box-sizing: border-box;
+}
+
+#past {
+    position: relative;
+    color: white;
+    top: 10px;
+    text-align: right;
+    font-size: 15px;
+    /* padding: 5px; */
+    padding-right: 10px;
+    overflow-x: scroll;
+    box-sizing: border-box;
+
 }
