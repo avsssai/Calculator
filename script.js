@@ -73,6 +73,7 @@ class Calculator {
 
             case '*':
                 computation = past * present;
+                computation = computation.toFixed(2);
                 break;
 
             case '/':
