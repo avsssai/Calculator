@@ -125,8 +125,23 @@ button.zero {
     overflow-x: scroll;
     height: 70px;
     box-sizing: border-box;
+    
+}
+#present {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#present::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
+#past {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+#past::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
 #past {
     position: relative;
     color: white;

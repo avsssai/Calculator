@@ -1,152 +1,224 @@
-//CALCULATOR LOGIC
+// Calculator logic
 
 class Calculator {
-    constructor(previousOperandTextElement,presentOperandTextElement,readyToReset){
-        this.presentOperandTextElement = presentOperandTextElement;
-        this.previousOperandTextElement = previousOperandTextElement;
-        this.readyToReset = false;
-        this.allClear();
+  constructor(pastOperandTextDisplay, presentOperandTextDisplay, readyToreset) {
+    this.pastOperandTextDisplay = pastOperandTextDisplay;
+    this.presentOperandTextDisplay = presentOperandTextDisplay;
+    this.readyToreset = false;
+    this.clear();
+  }
+
+  // All clear function
+  clear() {
+    this.presentOperand = "";
+    this.pastOperand = "";
+    this.operation = undefined;
+    this.updateDisplay();
+  }
+  //append number
+  appendNumber(number) {
+    if (number === null) return;
+    this.presentOperand = this.presentOperand.toString() + number.toString();
+    this.updateDisplay();
+  }
+
+  // append Decimal
+  appendDecimal(decimal) {
+    if (this.presentOperand === "." || this.presentOperand.includes(".")) {
+      return;
+    } else {
+      this.presentOperand = this.presentOperand.toString() + decimal.toString();
+      this.updateDisplay();
     }
-    allClear() {
-        this.presentOperand = '';
-        this.previousOperand = '';
-        this.operation = undefined;
-    }
+  }
 
+  chooseOperation(operation) {
+    if (this.presentOperand === "") return;
+    this.compute();
+    this.operation = operation;
+    this.pastOperand = this.presentOperand;
+    this.presentOperand = "";
+    this.updateDisplay();
+  }
 
-    deleteNumber() {
-        this.presentOperand = this.presentOperand.slice(0,-1);
-    }
-    appendDecimalPoint () {
-        if(this.presentOperand === '.' || this.presentOperand.includes('.')) return;
-        this.presentOperand = this.presentOperand.toString() + decimalButton.innerText;
-    }
-    appendNumber(number) {
-        this.presentOperand = this.presentOperand.toString() +  number.toString();
-    }
-    chooseOperation(operation) {
-        if(this.presentOperand === '') return;
-        if(this.previousOperand !== ''){
-            // if there is already an operand, and we press an operation button,
-            // we need to compute the value first before entering a new value.
-            this.compute();
-        }
-        this.operation = operation;
-        this.previousOperand = this.presentOperand;
-        this.presentOperand = '';
-        
-    }
-    displayFormat(number) {
-        let stringNumber = number.toString();
-        let integerPart = parseFloat(stringNumber.split('.')[0]);
-        let decimalPart = stringNumber.split('.')[1];
+  compute() {
+    let present = parseFloat(this.presentOperand);
+    let past = parseFloat(this.pastOperand);
 
-        let integerDisplay;
-        if(isNaN(integerPart)){
-            integerDisplay = '';
-        }else {
-            integerDisplay = integerPart.toLocaleString('en',{maximumFractionDigits:0});
-        }
+    if (isNaN(present) || isNaN(past)) return;
 
-        if(decimalPart != null){
-            return `${integerDisplay}.${decimalPart}`
-        }else{
-            return `${integerDisplay}`;
-        }
-        
-    }
+    let result;
 
-    compute() {
-        let computation;
-        let present = parseFloat(this.presentOperand);
-        let past = parseFloat(this.previousOperand);
-
-        if(isNaN(present) || isNaN(past)) return;
-
-        switch(this.operation){
-            case '+':
-                computation = past + present;
-                break;
-            case '-':
-                computation = past - present;
-                break;
-
-            case '*':
-                computation = past * present;
-                computation = computation.toFixed(2);
-                break;
-
-            case '/':
-                computation = past / present;
-                computation = computation.toFixed(2);
-                break;
-            default:
-                return;
-            
-        }
-
-        this.presentOperand = computation;
-        this.previousOperand = '';
-        this.operation = undefined;
-        this.readyToReset = true;
+    switch (this.operation) {
+      case "+":
+        result = present + past;
+        break;
+      case "-":
+        result = past - present;
+        break;
+      case "*":
+        result = past * present;
+        break;
+      case "/":
+        result = past / present;
+        break;
+      default:
+        return;
     }
 
-    updateDisplay() {
-        this.presentOperandTextElement.innerText = this.displayFormat(this.presentOperand);
-        this.previousOperandTextElement.innerText = this.operation ? `${this.displayFormat(this.previousOperand)} ${this.operation}` : '';
-    }
+    this.presentOperand = result;
+    this.pastOperand = "";
+    this.operation = undefined;
+    this.readyToreset = true;
+    this.updateDisplay();
+  }
 
-
-
+  delete() {
+    this.presentOperand = this.presentOperand.slice(0, -1);
+    this.updateDisplay();
+  }
+  updateDisplay() {
+    this.presentOperandTextDisplay.innerText = this.presentOperand;
+    this.pastOperandTextDisplay.innerText = `${this.pastOperand} ${
+      this.operation ? this.operation : ""
+    } `;
+  }
+  signChange() {
+    let present = parseFloat(this.presentOperand);
+    present = present > 0 ? -Math.abs(present) : present;
+    this.presentOperand = present;
+    this.updateDisplay();
+    console.log(present);
+  }
 }
 
-let numbers = document.querySelectorAll('[data-number]');
-let equalsButton = document.querySelector('[data-equals]');
-let deleteButton = document.querySelector('[data-delete]');
-let operationButtons = document.querySelectorAll('[data-operation]');
-let decimalButton = document.querySelector('[data-decimal]');
-let allClearButton = document.querySelector('[data-all-clear]');
-let previousOperandTextElement = document.querySelector('[data-previous-operand]');
-let presentOperandTextElement = document.querySelector('[data-present-operand]');
+let numbers = document.querySelectorAll("[data-number]");
+let operations = document.querySelectorAll("[data-operation]");
+let deleteButton = document.querySelector("[data-delete]");
+let pastOperandTextDisplay = document.querySelector("[data-previous-operand]");
+let presentOperandTextDisplay = document.querySelector(
+  "[data-present-operand]"
+);
+let allClearButton = document.querySelector("[data-all-clear]");
+let equalsButton = document.querySelector("[data-equals");
+let decimalButton = document.querySelector("[data-decimal]");
+let signChangeButton = document.querySelector("[data-sign-change]");
 
+let calculator = new Calculator(
+  pastOperandTextDisplay,
+  presentOperandTextDisplay
+);
 
-let calculator = new Calculator(previousOperandTextElement,presentOperandTextElement);
+allClearButton.addEventListener("click", (e) => {
+  calculator.clear();
+});
 
-numbers.forEach(button => {
-    button.addEventListener('click',(e) => {
-        if(calculator.previousOperand === '' && calculator.presentOperand !== '' && calculator.readyToReset){
-            calculator.presentOperand = '';
-            calculator.readyToReset = false;
-        }
-        calculator.appendNumber(button.innerText);
-        calculator.updateDisplay();
+numbers.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    if (
+      calculator.presentOperand !== "" &&
+      calculator.pastOperand === "" &&
+      calculator.readyToreset
+    ) {
+      calculator.clear();
+    }
+    let presentNumber;
+    calculator.appendNumber(button.innerText);
+    calculator.readyToreset = false;
+  });
+});
 
-    })
-})
+decimalButton.addEventListener("click", (e) => {
+  calculator.appendDecimal(e.target.textContent);
+});
 
-operationButtons.forEach(button => {
-    button.addEventListener('click',(e)=>{
-        calculator.chooseOperation(button.innerText);
-        calculator.updateDisplay();
-    })
-})
+operations.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    calculator.chooseOperation(button.textContent);
+  });
+});
 
-decimalButton.addEventListener('click',(e) =>{
-    calculator.appendDecimalPoint(decimalButton.innerText);
-    calculator.updateDisplay();
-})
+equalsButton.addEventListener("click", (e) => {
+  calculator.compute();
+});
 
-allClearButton.addEventListener('click',(e) => {
-    calculator.allClear();
-    calculator.updateDisplay();
-})
+deleteButton.addEventListener("click", (e) => {
+  calculator.delete();
+});
 
-deleteButton.addEventListener('click',(e) => {
-    calculator.deleteNumber();
-    calculator.updateDisplay()
-})
+signChangeButton.addEventListener("click", (e) => {
+  calculator.signChange();
+});
 
-equalsButton.addEventListener('click',(e)=>{
-    calculator.compute();
-    calculator.updateDisplay();
-})
+window.addEventListener("keydown", (e) => {
+  // if(e.key === '9'){
+  //     calculator.appendNumber('9');
+  // }
+  function clearAfterResult(number) {
+    if (
+        calculator.presentOperand !== "" &&
+        calculator.pastOperand === "" &&
+        calculator.readyToreset
+      ) {
+        calculator.clear();
+      }
+      return calculator.appendNumber(number);
+  }
+ 
+  
+  switch (e.key) {
+    case "9":
+        
+    //   calculator.appendNumber("9");
+        clearAfterResult("9");
+      break;
+    case "8":
+      calculator.appendNumber("8");
+      break;
+    case "7":
+      calculator.appendNumber("7");
+      break;
+    case "6":
+      calculator.appendNumber("6");
+      break;
+    case "5":
+      calculator.appendNumber("5");
+      break;
+    case "4":
+      calculator.appendNumber("4");
+      break;
+    case "3":
+      calculator.appendNumber("3");
+      break;
+    case "2":
+      calculator.appendNumber("2");
+      break;
+    case "1":
+      calculator.appendNumber("1");
+      break;
+    case "0":
+      calculator.appendNumber("0");
+      break;
+    case ".":
+      calculator.appendDecimal(".");
+      break;
+    case "*":
+      calculator.chooseOperation("*");
+      break;
+    case "/":
+      calculator.chooseOperation("/");
+      break;
+    case "-":
+      calculator.chooseOperation("-");
+      break;
+    case "+":
+      calculator.chooseOperation("+");
+      break;
+    case "Enter":
+        calculator.compute();
+        // calculator.readyToreset = true;
+        console.log(calculator.readyToreset);
+    default:
+  }
+
+});
