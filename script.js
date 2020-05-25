@@ -58,9 +58,11 @@ class Calculator {
         break;
       case "*":
         result = past * present;
+        result = result.toFixed(2);
         break;
       case "/":
         result = past / present;
+        result = result.toFixed(2);
         break;
       default:
         return;
@@ -74,14 +76,33 @@ class Calculator {
   }
 
   delete() {
-    this.presentOperand = this.presentOperand.slice(0, -1);
+    console.log(typeof this.presentOperand);
+    
+    this.presentOperand = this.presentOperand.toString().slice(0, -1);
     this.updateDisplay();
   }
+  displayFormat(number) {
+    let stringNumber = number.toString();
+    let numberSplit = stringNumber.split('.');
+    let integerPart = parseFloat(numberSplit[0]);
+    let decimalPart = numberSplit[1];
+    let integerDisplay;
+    if(isNaN(integerPart)){
+      integerDisplay = '';
+    }else{
+      integerDisplay = integerPart.toLocaleString("en-IN",{maximumFractionDigits:0});
+    }
+
+    if(decimalPart!=null){
+      return `${integerDisplay}.${decimalPart}`
+    }else{
+      return `${integerDisplay}`;
+    }
+  }
   updateDisplay() {
-    this.presentOperandTextDisplay.innerText = this.presentOperand;
-    this.pastOperandTextDisplay.innerText = `${this.pastOperand} ${
-      this.operation ? this.operation : ""
-    } `;
+    // console.log(typeof this.presentOperand, typeof this.pastOperand); 
+    this.presentOperandTextDisplay.innerText = this.displayFormat(this.presentOperand);
+    this.pastOperandTextDisplay.innerText = ` ${this.displayFormat(this.pastOperand)} ${this.operation ? this.operation : ""} `;
   }
   signChange() {
     let present = parseFloat(this.presentOperand);
@@ -111,6 +132,7 @@ let calculator = new Calculator(
 
 allClearButton.addEventListener("click", (e) => {
   calculator.clear();
+  allClearButton.blur();
 });
 
 numbers.forEach((button) => {
@@ -143,6 +165,7 @@ equalsButton.addEventListener("click", (e) => {
 });
 
 deleteButton.addEventListener("click", (e) => {
+  console.log(document.activeElement);
   calculator.delete();
 });
 
@@ -150,54 +173,56 @@ signChangeButton.addEventListener("click", (e) => {
   calculator.signChange();
 });
 
-window.addEventListener("keydown", (e) => {
+function clearAfterResult(number) {
+  if (
+    calculator.presentOperand !== "" &&
+    calculator.pastOperand === "" &&
+    calculator.readyToreset
+  ) {
+    calculator.clear();
+  }
+  calculator.readyToreset = false;
+  calculator.appendNumber(number);
+  // window.focus();
+}
+
+window.addEventListener("keyup", (e) => {
   // if(e.key === '9'){
   //     calculator.appendNumber('9');
   // }
-  function clearAfterResult(number) {
-    if (
-        calculator.presentOperand !== "" &&
-        calculator.pastOperand === "" &&
-        calculator.readyToreset
-      ) {
-        calculator.clear();
-      }
-      return calculator.appendNumber(number);
-  }
- 
-  
+
   switch (e.key) {
     case "9":
-        
-    //   calculator.appendNumber("9");
-        clearAfterResult("9");
+      clearAfterResult("9");
+     
       break;
     case "8":
-      calculator.appendNumber("8");
+      clearAfterResult("8");
+
       break;
     case "7":
-      calculator.appendNumber("7");
+      clearAfterResult("7");
       break;
     case "6":
-      calculator.appendNumber("6");
+      clearAfterResult("6");
       break;
     case "5":
-      calculator.appendNumber("5");
+      clearAfterResult("5");
       break;
     case "4":
-      calculator.appendNumber("4");
+      clearAfterResult("4");
       break;
     case "3":
-      calculator.appendNumber("3");
+      clearAfterResult("3");
       break;
     case "2":
-      calculator.appendNumber("2");
+      clearAfterResult("2");
       break;
     case "1":
-      calculator.appendNumber("1");
+      clearAfterResult("1");
       break;
     case "0":
-      calculator.appendNumber("0");
+      clearAfterResult("0");
       break;
     case ".":
       calculator.appendDecimal(".");
@@ -215,10 +240,16 @@ window.addEventListener("keydown", (e) => {
       calculator.chooseOperation("+");
       break;
     case "Enter":
-        calculator.compute();
-        // calculator.readyToreset = true;
-        console.log(calculator.readyToreset);
-    default:
+      calculator.compute();
+      break;
+    case "Backspace":
+      deleteButton.focus();
+      calculator.delete();
+      calculator.readyToreset = false;
+      deleteButton.blur();
+        break;
+    case "Escape":
+        calculator.clear();
+        break;
   }
-
 });
