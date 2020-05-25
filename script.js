@@ -52,12 +52,12 @@ class Calculator {
     switch (this.operation) {
       case "+":
         result = present + past;
-        result = result.toFixed(2);
+        // result = result.toFixed(2);
 
         break;
       case "-":
         result = past - present;
-        result = result.toFixed(2);
+        // result = result.toFixed(2);
 
         break;
       case "*":
@@ -67,7 +67,7 @@ class Calculator {
         break;
       case "/":
         result = past / present;
-        result = result.toFixed(2);
+        console.log(result);
         break;
       default:
         return;
