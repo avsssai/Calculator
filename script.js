@@ -52,12 +52,17 @@ class Calculator {
     switch (this.operation) {
       case "+":
         result = present + past;
+        result = result.toFixed(2);
+
         break;
       case "-":
         result = past - present;
+        result = result.toFixed(2);
+
         break;
       case "*":
         result = past * present;
+        console.log(typeof result);
         result = result.toFixed(2);
         break;
       case "/":
@@ -77,32 +82,42 @@ class Calculator {
 
   delete() {
     console.log(typeof this.presentOperand);
-    
+
     this.presentOperand = this.presentOperand.toString().slice(0, -1);
     this.updateDisplay();
   }
   displayFormat(number) {
     let stringNumber = number.toString();
-    let numberSplit = stringNumber.split('.');
+    let numberSplit = stringNumber.split(".");
     let integerPart = parseFloat(numberSplit[0]);
     let decimalPart = numberSplit[1];
     let integerDisplay;
-    if(isNaN(integerPart)){
-      integerDisplay = '';
-    }else{
-      integerDisplay = integerPart.toLocaleString("en-IN",{maximumFractionDigits:0});
+    if (isNaN(integerPart)) {
+      integerDisplay = "";
+    } else {
+      integerDisplay = integerPart.toLocaleString("en-IN", {
+        maximumFractionDigits: 0,
+      });
     }
 
-    if(decimalPart!=null){
-      return `${integerDisplay}.${decimalPart}`
-    }else{
+    if (decimalPart != null) {
+      if (decimalPart === "00") {
+        return `${integerDisplay}`;
+      } else {
+        return `${integerDisplay}.${decimalPart}`;
+      }
+    } else {
       return `${integerDisplay}`;
     }
   }
   updateDisplay() {
-    // console.log(typeof this.presentOperand, typeof this.pastOperand); 
-    this.presentOperandTextDisplay.innerText = this.displayFormat(this.presentOperand);
-    this.pastOperandTextDisplay.innerText = ` ${this.displayFormat(this.pastOperand)} ${this.operation ? this.operation : ""} `;
+    // console.log(typeof this.presentOperand, typeof this.pastOperand);
+    this.presentOperandTextDisplay.innerText = this.displayFormat(
+      this.presentOperand
+    );
+    this.pastOperandTextDisplay.innerText = ` ${this.displayFormat(
+      this.pastOperand
+    )} ${this.operation ? this.operation : ""} `;
   }
   signChange() {
     let present = parseFloat(this.presentOperand);
@@ -194,7 +209,7 @@ window.addEventListener("keyup", (e) => {
   switch (e.key) {
     case "9":
       clearAfterResult("9");
-     
+
       break;
     case "8":
       clearAfterResult("8");
@@ -247,9 +262,9 @@ window.addEventListener("keyup", (e) => {
       calculator.delete();
       calculator.readyToreset = false;
       deleteButton.blur();
-        break;
+      break;
     case "Escape":
-        calculator.clear();
-        break;
+      calculator.clear();
+      break;
   }
 });
