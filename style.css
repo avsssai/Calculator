@@ -160,3 +160,38 @@ button.zero {
 
 }
 
+@media(max-width: 500px){
+    body {
+        width: fit-content;
+        height: fit-content;
+    }
+    #calculator {
+        position: relative;
+        height: 330px;
+        width: 200px;
+        background-color:hsl(7, 56%, 59%);
+        top: 20vh;
+        margin: 0 auto;
+        border-radius: 10px;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        /* z-index: 200; */
+    }
+    #keypad {
+        position: relative;
+        background:hsl(205, 13%, 24%);
+        margin: 0 auto;
+        height: 160px;
+        width: 250px;
+        top: 40px;
+        border-radius: 10px;
+        padding-top: 15px;
+        box-sizing: border-box;
+    }
+    .buttons {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-evenly;
+    }
+    
+}

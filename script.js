@@ -79,6 +79,7 @@ class Calculator {
     console.log(typeof this.presentOperand);
     
     this.presentOperand = this.presentOperand.toString().slice(0, -1);
+  
     this.updateDisplay();
   }
   displayFormat(number) {
@@ -166,7 +167,9 @@ equalsButton.addEventListener("click", (e) => {
 
 deleteButton.addEventListener("click", (e) => {
   console.log(document.activeElement);
+
   calculator.delete();
+  calculator.readyToreset = false;
 });
 
 signChangeButton.addEventListener("click", (e) => {
